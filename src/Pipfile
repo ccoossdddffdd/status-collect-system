@@ -1,0 +1,22 @@
+[[source]]
+name = "pypi"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+verify_ssl = false
+
+[packages]
+flask = "*"
+flask-redis = "*"
+flask-caching = "*"
+logbook = "*"
+gunicorn = "*"
+py = "*"
+fs = "*"
+celery = "*"
+arrow = "*"
+requests = "*"
+environs = "*"
+trio = "*"
+gevent = "*"
+
+[requires]
+python_version = "3.7"

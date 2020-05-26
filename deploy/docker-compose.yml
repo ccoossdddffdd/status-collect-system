@@ -1,0 +1,44 @@
+version: "3.4"
+
+services:
+  scs-schedule-pppay:
+    build: ./image/scs-df
+    restart: always
+    volumes:
+      - /etc/hosts:/etc/hosts:ro
+      - ./etc/localtime:/etc/localtime:ro
+      - ../src:/data/scs:rw
+      - ../logs:/data/logs:rw
+    entrypoint: ["/data/run_schedule.sh"]
+    environment:
+      - FLASK_APP=/data/scs/autoapp.py
+      - PYTHONUNBUFFERED=0
+
+  scs-backscript-pppay:
+    build: ./image/scs-df
+    restart: always
+    volumes:
+      - /etc/hosts:/etc/hosts:ro
+      - ./etc/localtime:/etc/localtime:ro
+      - ../src:/data/scs:rw
+      - ../logs:/data/logs:rw
+    entrypoint: ["/data/run_celery.sh"]
+    environment:
+      - FLASK_APP=/data/scs/autoapp.py
+      - PYTHONUNBUFFERED=0
+
+  scs-api-pppay:
+    build: ./image/scs-df
+    restart: always
+    ports:
+      - "${PPPAY_MIDDLEWARE_PORT}:5999"
+    entrypoint: ["/data/run_gunicorn.sh"]
+    volumes:
+      - /etc/hosts:/etc/hosts:ro
+      - ./etc/localtime:/etc/localtime:ro
+      - ../src:/data/scs:rw
+      - ../qrcodes:/data/qrcodes:rw
+      - ../logs:/data/logs:rw
+    environment:
+      - FLASK_APP=/data/scs/autoapp.py
+      - PYTHONUNBUFFERED=0
