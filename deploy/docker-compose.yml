@@ -1,8 +1,17 @@
 version: "3.4"
 
 services:
-  scs-schedule-pppay:
+  scs-redis:
+    image: redis:latest
+    restart: always
+    volumes:
+      - /etc/hosts:/etc/hosts:ro
+      - ./etc/localtime:/etc/localtime:ro
+
+  scs-schedule:
     build: ./image/scs-df
+    links:
+      - scs-redis
     restart: always
     volumes:
       - /etc/hosts:/etc/hosts:ro
@@ -14,8 +23,10 @@ services:
       - FLASK_APP=/data/scs/autoapp.py
       - PYTHONUNBUFFERED=0
 
-  scs-backscript-pppay:
+  scs-backscript:
     build: ./image/scs-df
+    links:
+      - scs-redis
     restart: always
     volumes:
       - /etc/hosts:/etc/hosts:ro
@@ -27,11 +38,11 @@ services:
       - FLASK_APP=/data/scs/autoapp.py
       - PYTHONUNBUFFERED=0
 
-  scs-api-pppay:
+  scs-api:
     build: ./image/scs-df
+    links:
+      - scs-redis
     restart: always
-    ports:
-      - "${PPPAY_MIDDLEWARE_PORT}:5999"
     entrypoint: ["/data/run_gunicorn.sh"]
     volumes:
       - /etc/hosts:/etc/hosts:ro
@@ -42,3 +53,28 @@ services:
     environment:
       - FLASK_APP=/data/scs/autoapp.py
       - PYTHONUNBUFFERED=0
+
+  # web 入口
+  scs-ng:
+    image: nginx:latest
+    links:
+      - scs-api
+    ports:
+      - "${SCS_PORT_FRONT}:80"
+      - "${SCS_PORT_API}:8099"
+    restart: always
+    volumes:
+      - /etc/hosts:/etc/hosts:ro
+      - ./etc/localtime:/etc/localtime:ro
+
+      - ./etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./etc/nginx/conf.d:/etc/nginx/conf.d:ro
+
+      - ../logs/nginx:/var/log/nginx:rw
+      - ../web-frontend:/data/www/web-frontend:ro
+
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65535
+        hard: 65535

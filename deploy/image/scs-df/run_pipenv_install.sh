@@ -1,5 +1,5 @@
 #!/bin/sh
-cd /data/www/pay-middleware
+cd /data/scs
 
 export PIPENV_VENV_IN_PROJECT=1
 export PYTHONUNBUFFERED=0

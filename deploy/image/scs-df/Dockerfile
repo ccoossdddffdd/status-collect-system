@@ -3,7 +3,7 @@ COPY ./repositories /etc/apk/repositories
 
 RUN pip install pipenv -i https://mirrors.aliyun.com/pypi/simple/
 
-RUN apk add --update --no-cache gcc libxml2 libxml2-dev libxslt-dev libffi-dev musl-dev 
+RUN apk add --update --no-cache gcc libxml2 libxml2-dev make libxslt-dev libffi-dev musl-dev 
 
 COPY ./run_celery.sh /data/
 RUN chmod +x /data/run_celery.sh

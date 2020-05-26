@@ -6,7 +6,6 @@ from flask.cli import with_appcontext
 from flask import current_app
 
 from scs import modules
-from scs.utils.tunnels import tunnels
 
 async def run_task_async_each(fn, sleep):
     import trio
@@ -20,7 +19,6 @@ async def run_task_async_each(fn, sleep):
             warn(traceback.format_exc())
 
         await trio.sleep(sleep)
-
 
 @click.command()
 @click.pass_context
