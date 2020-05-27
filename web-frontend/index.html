@@ -1,1 +1,77 @@
-hello
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Report Show</title>
+</head>
+
+<body>
+    <div id="container"></div>
+</body>
+
+<script src="assets/jquery.min.js"></script>
+<script src="assets/jquery.ba-hashchange.min.js"></script>
+<script src="assets/mustache.min.js"></script>
+
+<script id="template_item" type="x-tmpl-mustache">
+    <h3>[ {{ group_name }} ]</h3>
+    {{#items}}
+    <div>
+        <p><b>{{name}}</b> <small>{{key}}</small></p>
+        {{#show_status}}{{status}}{{/show_status}}
+        
+        {{#trigger_at}}<small>{{.}} | </small>{{/trigger_at}}
+        {{^trigger_at}}<small>...</small>{{/trigger_at}}
+
+        <hr />
+    </div>
+    {{/items}}
+</script>
+
+<script type="text/javascript">
+    String.prototype.format = function () {
+        a = this;
+        for (k in arguments) {
+            a = a.replace("{" + k + "}", arguments[k])
+        }
+        return a
+    };
+
+    function renderTo(dom_id, to_dom, data) {
+        var rendered = Mustache.render($(dom_id).html(), data);
+        $(to_dom).html(rendered);
+    }
+
+    function show_report(group) {
+        if(group == '') {
+            $('#container').html('hello');
+            return ;
+        }
+
+        $('#container').html("loading {0} ...".format(group));
+        $.getJSON('//localhost:8579/report/' + group, function (res) {
+            res['data']['show_status'] = function () {
+                return function (text, render) {
+                    switch(render(text)) {
+                        case '0':
+                            return '<span style="color: green; font-weight: bold;">正常</span>';
+                        break;
+                        case '1':
+                            return '<span style="color: red; font-weight: bold;">异常</span>';
+                        break;
+                        default:
+                            return '-';
+                    }
+                }
+            };
+            renderTo('#template_item', '#container', res['data']);
+        });
+    };
+
+    $(window).hashchange(function () {
+        show_report(location.hash.replace('#', ''));
+    });
+    $(window).hashchange();
+</script>
+
+</html>

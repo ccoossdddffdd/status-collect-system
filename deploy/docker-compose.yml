@@ -42,6 +42,8 @@ services:
     build: ./image/scs-df
     links:
       - scs-redis
+    ports:
+      - "${SCS_PORT_API}:5999"
     restart: always
     entrypoint: ["/data/run_gunicorn.sh"]
     volumes:
@@ -57,11 +59,9 @@ services:
   # web 入口
   scs-ng:
     image: nginx:latest
-    links:
-      - scs-api
     ports:
       - "${SCS_PORT_FRONT}:80"
-      - "${SCS_PORT_API}:8099"
+      # - "${SCS_PORT_API}:8099"
     restart: always
     volumes:
       - /etc/hosts:/etc/hosts:ro
