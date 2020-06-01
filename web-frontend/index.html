@@ -43,22 +43,22 @@
     }
 
     function show_report(group) {
-        if(group == '') {
+        if (group == '') {
             $('#container').html('hello');
-            return ;
+            return;
         }
 
         $('#container').html("loading {0} ...".format(group));
-        $.getJSON('//localhost:8579/report/' + group, function (res) {
+        $.getJSON('/report/' + group, function (res) {
             res['data']['show_status'] = function () {
                 return function (text, render) {
-                    switch(render(text)) {
+                    switch (render(text)) {
                         case '0':
                             return '<span style="color: green; font-weight: bold;">正常</span>';
-                        break;
+                            break;
                         case '1':
                             return '<span style="color: red; font-weight: bold;">异常</span>';
-                        break;
+                            break;
                         default:
                             return '-';
                     }
