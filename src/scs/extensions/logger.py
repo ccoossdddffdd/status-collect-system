@@ -27,13 +27,12 @@ class LoggerFactory:
         sh.format_string = '[{record.time:%Y-%m-%d %H:%M:%S.%f%z}] {record.level_name}: {record.message}'
         sh.push_application()
 
-    def loadCollectType(self, group, key):
-        pass
-        # if self.root is None:
-        #     return
-        # fh = TimedRotatingFileHandler(self.root.join('{}.log'.format(log_name.replace('/', '-'))))
-        # fh.format_string = '[{record.time:%Y-%m-%d %H:%M:%S.%f%z}] {record.level_name}: {record.message}'
-        # fh.push_application()
+    def set_logger(self, log_name):
+        if self.root is None:
+            return
+        fh = TimedRotatingFileHandler(self.root.join('{}.log'.format(log_name.replace('/', '-'))))
+        fh.format_string = '[{record.time:%Y-%m-%d %H:%M:%S.%f%z}] {record.level_name}: {record.message}'
+        fh.push_application()
 
 
 def bind(app):

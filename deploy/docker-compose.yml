@@ -50,7 +50,6 @@ services:
       - /etc/hosts:/etc/hosts:ro
       - ./etc/localtime:/etc/localtime:ro
       - ../src:/data/scs:rw
-      - ../qrcodes:/data/qrcodes:rw
       - ../logs:/data/logs:rw
     environment:
       - FLASK_APP=/data/scs/autoapp.py

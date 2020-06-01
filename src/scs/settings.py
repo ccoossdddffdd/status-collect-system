@@ -27,8 +27,6 @@ REQUEST_SECRET = env("REQUEST_SECRET", '')
 CORE_HOST = env("CORE_HOST", '')
 LOG_NAME = env("LOG_NAME", 'pppay-middleware')
 LOG_PATH = env("LOG_PATH", '/data/www/logs')
-QRCODE_PATH = env("QRCODE_PATH", '/data/www/qrcodes')
-QRCODE_URL = env("QRCODE_URL", 'http://QRCODE_URL')
 
 FATEADM_PD_ID = env("FATEADM_PD_ID", '')
 FATEADM_PD_KEY = env("FATEADM_PD_KEY", '')
