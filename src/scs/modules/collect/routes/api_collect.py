@@ -8,18 +8,20 @@ from flask import current_app
 from flask import request
 from logbook import info, warn
 
-
 @current_app.route("/collect/<group>", methods=['POST'])
 def api_collect(group):
     code, msg, data = 1, 'faild', {}
     try:
-        data['items'] = []
-        data['items'].append({
-            'name': 'fffs asdf',
-            'key': 'dihjhgvbhuyghasffe',
-            'status': 0,
-            'trigger_at': []
-        })
+        key = request.form.get('key', '')
+        assert key != '', 'key 值不能为空'
+
+        uuid = request.form.get('uuid', '')
+        assert uuid != '', 'uuid 值不能为空'
+
+        collect = current_app.status.loadCollectObject(group, key)
+        assert collect is None, '未设置收集类型'
+        
+        data = collect.do(uuid)
         code, msg = 0, 'ok'
     except Exception as error:
         code, msg = 99992, 'err: [{}]'.format(error)

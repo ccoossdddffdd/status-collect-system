@@ -1,7 +1,6 @@
 #!/bin/sh
 cd /data/scs
 
-
     # --worker-class=gevent \
     # --worker-connections=65535 \
 export PIPENV_VENV_IN_PROJECT=1
