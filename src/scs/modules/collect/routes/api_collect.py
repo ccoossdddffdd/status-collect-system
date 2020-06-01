@@ -8,14 +8,14 @@ from flask import current_app
 from flask import request
 from logbook import info, warn
 
-@current_app.route("/collect/<group>", methods=['POST', 'GET'])
+@current_app.route("/collect/<group>", methods=['GET'])
 def api_collect(group):
     code, msg, data = 1, 'faild', {}
     try:
-        key = request.form.get('key', '')
+        key = request.args.get('key', '')
         assert key != '', 'key 值不能为空'
 
-        uuid = request.form.get('uuid', '')
+        uuid = request.args.get('uuid', '')
         assert uuid != '', 'uuid 值不能为空'
 
         collect = current_app.status.loadCollectObject(group, key)

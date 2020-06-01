@@ -58,6 +58,7 @@ services:
     image: nginx:latest
     ports:
       - "${SCS_PORT_FRONT}:80"
+      - "${SCS_PORT_API}:8088"
     restart: always
     volumes:
       - /etc/hosts:/etc/hosts:ro
