@@ -8,7 +8,7 @@ from flask import current_app
 from flask import request
 from logbook import info, warn
 
-@current_app.route("/collect/<group>", methods=['POST'])
+@current_app.route("/collect/<group>", methods=['POST', 'GET'])
 def api_collect(group):
     code, msg, data = 1, 'faild', {}
     try:
