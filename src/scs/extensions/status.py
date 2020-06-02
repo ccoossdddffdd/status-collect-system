@@ -18,8 +18,9 @@ class Collect:
         self.key = key
 
     def do(self, uuid):
-        self.trigger(uuid)
-        self.watchdog_uuid(uuid)
+        if self.trigger(uuid):
+            self.watchdog_uuid(uuid)
+        return []
 
     def watchdog_uuid(self, uuid):
         """
@@ -46,6 +47,7 @@ class SetCollect(Collect):
         assert status != '', 'status 值不能为空'
 
         self.store_status(uuid, int(status))
+        return True
 
 
 class TriggerCollect(Collect):
@@ -55,6 +57,7 @@ class TriggerCollect(Collect):
         触发则认为正常
         """
         self.store_status(uuid, 0)
+        return True
 
 
 class RunDoneCollect(Collect):
@@ -80,8 +83,8 @@ class RunDoneCollect(Collect):
                 self.store_status(uuid, 0)
             else:
                 self.store_status(uuid, 1)
-
-
+        
+        return True
 
 class StatusFactory:
     def __init__(self, app):
@@ -92,7 +95,7 @@ class StatusFactory:
         
     # def loadCollectResult(self, group, key):
     #     return RunDoneCollect(self.app, group, key)
-        
+
 def bind(app):
     """."""
     return StatusFactory(app)

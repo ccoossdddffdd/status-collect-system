@@ -19,7 +19,7 @@ def api_collect(group):
         assert uuid != '', 'uuid 值不能为空'
 
         collect = current_app.status.loadCollectObject(group, key)
-        assert collect is None, '未设置收集类型'
+        assert collect is not None, '未设置收集类型'
         
         data = collect.do(uuid)
         code, msg = 0, 'ok'
