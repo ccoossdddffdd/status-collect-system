@@ -4,6 +4,8 @@ services:
   scs-redis:
     image: redis:latest
     restart: always
+    ports:
+      - "46379:6379"
     volumes:
       - /etc/hosts:/etc/hosts:ro
       - ./etc/localtime:/etc/localtime:ro
