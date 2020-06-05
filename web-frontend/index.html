@@ -16,11 +16,13 @@
 <script id="template_item" type="x-tmpl-mustache">
     <h3>[ {{ group_name }} ]</h3>
     {{#items}}
-    <div>
-        <p><b>{{name}}</b> <small>{{key}}</small></p>
-        {{#show_status}}{{status}}{{/show_status}}
+    <div data-key="{{key}}">
+        <p>
+            <b>{{name}}</b> [ <small>{{key}}</small> ]
+            [ {{#show_status}}{{status}}{{/show_status}} ]
+        </p>
         
-        {{#trigger_at}}<small>{{.}} | </small>{{/trigger_at}}
+        {{#trigger_at}}<p style="margin:0;padding:0;"><small>{{.}}</small></p>{{/trigger_at}}
         {{^trigger_at}}<small>...</small>{{/trigger_at}}
 
         <hr />
@@ -42,11 +44,21 @@
         $(to_dom).html(rendered);
     }
 
+    function reset_key(dom) {
+        var key = $(dom).parent().data('key');
+        $.getJSON("/report/{0}/{1}/reset_status".format(window.group, key), function (res) {
+            console.log(res);
+            show_report(window.group);
+        });
+    }
+
     function show_report(group) {
         if (group == '') {
             $('#container').html('hello');
             return;
         }
+
+        window.group = group;
 
         $('#container').html("loading {0} ...".format(group));
         $.getJSON('/report/' + group, function (res) {
@@ -57,12 +69,12 @@
                             return '<span style="color: green; font-weight: bold;">正常</span>';
                             break;
                         case '1':
-                            return '<span style="color: red; font-weight: bold;">异常</span>';
+                            return '<span style="color: red; font-weight: bold;">异常</span><a href="javascript: void(0);" onclick="reset_key(this);" style="font-size: 0.8em;">重置</a>';
                             break;
                         default:
                             return '-';
                     }
-                }
+                };
             };
             renderTo('#template_item', '#container', res['data']);
         });

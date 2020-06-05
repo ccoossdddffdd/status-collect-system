@@ -54,7 +54,7 @@ class Collect:
         # 追加异常记录列表
         if status == 1:
             fkkey = 'scs|fk|{}:{}'.format(self.group, self.key)
-            self.app.redis.lpush(fkkey, ts2humanize(now_ts()))
+            self.app.redis.lpush(fkkey, '{} {} 执行异常'.format(ts2humanize(now_ts()), uuid))
             if self.app.redis.llen(fkkey) > 10:
                 self.app.redis.rpop(fkkey)
 
